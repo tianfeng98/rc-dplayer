@@ -1,0 +1,19 @@
+.wrapper {
+  display: grid;
+  width: 100vw;
+  height: 100vh;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-rows: 50%;
+  padding: 8px;
+  background-color: black;
+  color: #fff;
+  .item {
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    &:last-child{
+      flex-grow: 1;
+    }
+  }
+}
