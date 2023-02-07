@@ -2,6 +2,7 @@ import { useCreation, useMemoizedFn, useUnmount, useUpdate } from "ahooks";
 import classnames from "classnames";
 import type { DPlayerOptions } from "dplayer";
 import DPlayer, { DPlayerEvents } from "dplayer";
+import prefixClassnames from "prefix-classnames";
 import type {
   HTMLAttributes,
   Key,
@@ -20,8 +21,7 @@ import { ext2MseType } from "./utils";
 export * from "./enum";
 export * from "./utils";
 
-const prefixCls = (className?: string) =>
-  ["rc-dplayer", className].filter((d) => d).join("-");
+const prefixCls = prefixClassnames(GLOBAL_PREFIX);
 
 export interface PlayerRef {
   /**

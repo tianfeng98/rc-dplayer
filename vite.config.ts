@@ -27,9 +27,9 @@ export default defineConfig({
       formats: ["es", "cjs"],
       fileName: "index",
     },
-    minify: false,
     rollupOptions: {
       external: ["react", "react-dom"],
     },
+    copyPublicDir: false,
   },
 });

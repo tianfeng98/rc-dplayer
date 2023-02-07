@@ -1,5 +1,3 @@
-import RcDPlayer from './Player'
+export { default as Player } from "./Player";
 
-export * from './Player'
-
-export default RcDPlayer
+export * from "./Player";

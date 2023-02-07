@@ -1,4 +1,4 @@
-import RcDPlayer from "@/index";
+import { Player as RcDPlayer } from "@/index";
 import styles from "./app.module.less";
 
 const testResources = ["/test.mp4", "/hls/index.m3u8", "test.flv"];
