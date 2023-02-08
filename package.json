@@ -14,6 +14,7 @@
   },
   "homepage": "https://github.com/tianfeng98/rc-dplayer/blob/main/README.md",
   "repository": "https://github.com/tianfeng98/rc-dplayer",
+  "keywords": ["react player","dplayer", "hls", "flv"],
   "scripts": {
     "dev": "vite",
     "build": "pnpm run build:component && pnpm run build:demo",
