@@ -158,7 +158,7 @@ const Player = (
   }));
 
   useEffect(() => {
-    if (autoLoad) {
+    if (autoLoad && src) {
       handleLoad(src);
     }
   }, [autoLoad, src]);
