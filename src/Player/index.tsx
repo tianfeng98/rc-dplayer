@@ -1,7 +1,7 @@
 import { useCreation, useMemoizedFn, useUnmount, useUpdate } from "ahooks";
 import classnames from "classnames";
 import type { DPlayerOptions } from "dplayer";
-import DPlayer, { DPlayerEvents } from "dplayer";
+import DPlayer from "dplayer";
 import prefixClassnames from "prefix-classnames";
 import type {
   HTMLAttributes,
@@ -13,7 +13,7 @@ import type {
 } from "react";
 import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 import { createPortal } from "react-dom";
-import type { MseType } from "./enum";
+import { DPlayerEvents, MseType } from "./enum";
 import "./index.less";
 import { getMSE } from "./mediaConfig";
 import { ext2MseType } from "./utils";
@@ -65,7 +65,8 @@ export interface CustomController {
   onClick?: (event: ReactMouseEvent<HTMLDivElement, MouseEvent>) => void;
 }
 
-export interface DPlayerProps extends HTMLAttributes<HTMLDivElement> {
+export interface DPlayerProps
+  extends Omit<HTMLAttributes<HTMLDivElement>, "onLoad"> {
   src?: string;
 
   mseType?: MseType;
@@ -80,6 +81,8 @@ export interface DPlayerProps extends HTMLAttributes<HTMLDivElement> {
    * Custom controller
    */
   customControllers?: CustomController[];
+
+  onLoad?: (dp: DPlayer) => void;
 
   /**
    * DPlayer Events
@@ -96,6 +99,7 @@ const Player = (
     autoLoad = true,
     customControllers = [],
     className,
+    onLoad,
     onEnded,
     onError,
     ...divProps
@@ -150,6 +154,7 @@ const Player = (
     });
     listenEvent();
     update();
+    onLoad?.(dp.current);
     return dp.current;
   });
 
