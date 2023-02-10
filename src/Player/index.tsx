@@ -21,6 +21,8 @@ import { ext2MseType } from "./utils";
 export * from "./enum";
 export * from "./utils";
 
+export { default as DPlayer } from "dplayer";
+
 const prefixCls = prefixClassnames(GLOBAL_PREFIX);
 
 export interface PlayerRef {
@@ -40,16 +42,18 @@ type ControllerPosition = "left" | "right";
 
 export interface CustomControllersProps extends PropsWithChildren<any> {
   position: ControllerPosition;
+  playerDom?: HTMLElement | null;
 }
 
 export const CustomControllersPortal = ({
   position,
   children,
+  playerDom,
 }: CustomControllersProps) => {
   if (children) {
-    const iconsDom = document
-      .querySelector(`.${prefixCls()}`)
-      ?.querySelector(`.dplayer-icons-${position}`);
+    const iconsDom = (playerDom || document.body)?.querySelector(
+      `.dplayer-icons-${position}`
+    );
     if (iconsDom) {
       return createPortal(children, iconsDom);
     }
@@ -196,10 +200,10 @@ const Player = (
         {...divProps}
       />
       <>
-        <CustomControllersPortal position="left">
+        <CustomControllersPortal position="left" playerDom={dom.current}>
           {renderCustomControllers(customLeftControllers)}
         </CustomControllersPortal>
-        <CustomControllersPortal position="right">
+        <CustomControllersPortal position="right" playerDom={dom.current}>
           {renderCustomControllers(customRightControllers)}
         </CustomControllersPortal>
       </>

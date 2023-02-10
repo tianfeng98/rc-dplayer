@@ -7,7 +7,6 @@ const testResources = ["/test.mp4", "/hls/index.m3u8", "test.flv"];
 function App() {
   const { run: saveCurrent } = useThrottleFn(
     (url: string, currentTime: number) => {
-      console.log("保存进度", currentTime);
       localStorage.setItem(
         url,
         JSON.stringify({
@@ -29,6 +28,13 @@ function App() {
             options={{
               autoplay: true,
             }}
+            customControllers={[
+              {
+                key: "aa",
+                component: <span>aaa</span>,
+                position: "left",
+              },
+            ]}
             onLoad={(dp) => {
               // 读取视频播放进度
               const localData = localStorage.getItem(d);

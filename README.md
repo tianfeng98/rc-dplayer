@@ -37,15 +37,16 @@ const App = () => {
 
 ## Props
 
-| name              | type               | description                                      | default         |
-| ----------------- | ------------------ | ------------------------------------------------ | --------------- |
-| src               | string             | Video source .                                   | -               |
-| mseType           | MseType            | MSE type .                                       | MseType.default |
-| autoLoad          | boolean            | Auto load video when it\`s true and `src` exits. | true            |
-| options           | DPlayerOptions     | The other options of DPlayer .                   | -               |
-| customControllers | CustomController[] | Custom controller                                | -               |
-| onEnded           | () => void         | `Ended` event of DPlayer .                       | -               |
-| onError           | () => void         | `Error` event of DPlayer .                       | -               |
+| name              | type                  | description                                      | default         |
+| ----------------- | --------------------- | ------------------------------------------------ | --------------- |
+| src               | string                | Video source .                                   | -               |
+| mseType           | MseType               | MSE type .                                       | MseType.default |
+| autoLoad          | boolean               | Auto load video when it\`s true and `src` exits. | true            |
+| options           | DPlayerOptions        | The other options of DPlayer .                   | -               |
+| customControllers | CustomController[]    | Custom controller                                | -               |
+| onLoad            | (dp: DPlayer) => void | Callback of player loaded                        | -               |
+| onEnded           | () => void            | `Ended` event of DPlayer .                       | -               |
+| onError           | () => void            | `Error` event of DPlayer .                       | -               |
 
 ## Interface
 
