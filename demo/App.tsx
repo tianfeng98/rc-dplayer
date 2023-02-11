@@ -1,10 +1,14 @@
 import { DPlayerEvents, Player as RcDPlayer } from "@/index";
 import { useThrottleFn } from "ahooks";
-import { ChangeEvent } from "react";
+import { ChangeEvent, useRef, useState } from "react";
 import styles from "./app.module.less";
 
-const testResources = ["/test.mp4", "/hls/index.m3u8", "test.flv"];
 function App() {
+  const [testResources, setTestResources] = useState([
+    "/test.mp4",
+    "/hls/index.m3u8",
+    "test.flv",
+  ]);
   const { run: saveCurrent } = useThrottleFn(
     (url: string, currentTime: number) => {
       localStorage.setItem(
@@ -18,11 +22,26 @@ function App() {
       wait: 1000,
     }
   );
+
+  const hasDestroyed = useRef(false);
+  const handleClose = (u: string) => {
+    setTestResources((origin) => origin.filter((d) => d !== u));
+  };
+
   return (
     <div className={styles.wrapper}>
       {testResources.map((d) => (
         <div key={d} className={styles.item}>
-          <span>{d}</span>
+          <div>
+            <span>{d}</span>{" "}
+            <button
+              onClick={() => {
+                handleClose(d);
+              }}
+            >
+              close
+            </button>
+          </div>
           <RcDPlayer
             src={d}
             options={{
@@ -50,8 +69,14 @@ function App() {
               dp.on(DPlayerEvents.timeupdate, ((
                 e: ChangeEvent<HTMLVideoElement>
               ) => {
-                saveCurrent(d, e.target.currentTime);
+                if (!hasDestroyed.current) {
+                  console.log("time update", e.target.currentTime);
+                  saveCurrent(d, e.target.currentTime);
+                }
               }) as any);
+              dp.on(DPlayerEvents.destroy, () => {
+                hasDestroyed.current = true;
+              });
             }}
           />
         </div>
