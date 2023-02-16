@@ -79,7 +79,9 @@ export interface DPlayerProps
    * When a play source exists, it is automatically loaded
    */
   autoLoad?: boolean;
-  options?: Partial<DPlayerOptions>;
+  options?: Partial<Omit<DPlayerOptions, "video">> & {
+    video?: Partial<DPlayerOptions["video"]>;
+  };
 
   /**
    * Custom controller
@@ -99,7 +101,7 @@ const Player = (
   {
     src,
     mseType,
-    options,
+    options = {},
     autoLoad = true,
     customControllers = [],
     className,
@@ -148,13 +150,15 @@ const Player = (
     if (dp.current) {
       handleDestroy();
     }
+    const { video, ...otherOptions } = options;
     dp.current = new DPlayer({
       container: dom.current,
       video: {
         url,
         ...mseConfig,
+        ...video,
       },
-      ...options,
+      ...otherOptions,
     });
     listenEvent();
     update();
