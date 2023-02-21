@@ -15,13 +15,13 @@ npm install rc-dplayer
 ### pnpm
 
 ```shell
-pnpm install rc-dplayer
+pnpm add rc-dplayer
 ```
 
 ## Examples
 
 ```tsx
-import { Player as RcDPlayer } from "@/index";
+import { Player as RcDPlayer } from "rc-dplayer";
 
 const App = () => {
   return (

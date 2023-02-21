@@ -10,6 +10,7 @@ import type {
   PropsWithChildren,
   ReactNode,
   Ref,
+  SyntheticEvent,
 } from "react";
 import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 import { createPortal } from "react-dom";
@@ -39,6 +40,10 @@ export const initRef: PlayerRef = {
 };
 
 type ControllerPosition = "left" | "right";
+
+export interface RcDPlayer extends DPlayer {
+  on(event: DPlayerEvents, handler: (event: SyntheticEvent) => void): void;
+}
 
 export interface CustomControllersProps extends PropsWithChildren<any> {
   position: ControllerPosition;
@@ -70,9 +75,11 @@ export interface CustomController {
 }
 
 export interface DPlayerProps
-  extends Omit<HTMLAttributes<HTMLDivElement>, "onLoad"> {
+  extends Omit<
+    HTMLAttributes<HTMLDivElement>,
+    "onLoad" | "onError" | "onEnded"
+  > {
   src?: string;
-
   mseType?: MseType;
 
   /**
@@ -87,14 +94,13 @@ export interface DPlayerProps
    * Custom controller
    */
   customControllers?: CustomController[];
-
-  onLoad?: (dp: DPlayer) => void;
+  onLoad?: (dp: RcDPlayer) => void;
 
   /**
    * DPlayer Events
    */
-  onEnded?: () => void;
-  onError?: () => void;
+  onEnded?: (event: SyntheticEvent) => void;
+  onError?: (event: SyntheticEvent) => void;
 }
 
 const Player = (
@@ -113,7 +119,7 @@ const Player = (
   ref: Ref<PlayerRef>
 ) => {
   const dom = useRef<HTMLDivElement>(null);
-  const dp = useRef<DPlayer>();
+  const dp = useRef<RcDPlayer>();
   const mse = useRef<any>(null);
   const update = useUpdate();
 
@@ -159,7 +165,7 @@ const Player = (
         ...video,
       },
       ...otherOptions,
-    });
+    }) as RcDPlayer;
     listenEvent();
     update();
     onLoad?.(dp.current);

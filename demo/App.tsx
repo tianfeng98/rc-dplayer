@@ -5,7 +5,8 @@ import styles from "./app.module.less";
 
 function App() {
   const [testResources, setTestResources] = useState([
-    "/test.mp4",
+    // "/test.mp4",
+    "/404",
     "/hls/index.m3u8",
     "test.flv",
   ]);
@@ -54,6 +55,9 @@ function App() {
                 position: "left",
               },
             ]}
+            onError={(e) => {
+              console.log("**** error", e);
+            }}
             onLoad={(dp) => {
               // 读取视频播放进度
               const localData = localStorage.getItem(d);
@@ -70,7 +74,6 @@ function App() {
                 e: ChangeEvent<HTMLVideoElement>
               ) => {
                 if (!hasDestroyed.current) {
-                  console.log("time update", e.target.currentTime);
                   saveCurrent(d, e.target.currentTime);
                 }
               }) as any);
