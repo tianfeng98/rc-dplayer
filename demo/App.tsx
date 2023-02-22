@@ -47,6 +47,7 @@ function App() {
             src={d}
             options={{
               autoplay: true,
+              screenshot: true,
             }}
             customControllers={[
               {
@@ -57,6 +58,12 @@ function App() {
             ]}
             onError={(e) => {
               console.log("**** error", e);
+            }}
+            onResize={(e) => {
+              console.log(e);
+            }}
+            onFullscreen={() => {
+              console.log("onFullscreen");
             }}
             onLoad={(dp) => {
               // 读取视频播放进度

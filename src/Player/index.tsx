@@ -1,20 +1,15 @@
-import { useCreation, useMemoizedFn, useUnmount, useUpdate } from "ahooks";
+import { useMemoizedFn, useUnmount, useUpdate } from "ahooks";
 import classnames from "classnames";
 import type { DPlayerOptions } from "dplayer";
 import DPlayer from "dplayer";
 import prefixClassnames from "prefix-classnames";
-import type {
-  HTMLAttributes,
-  Key,
-  MouseEvent as ReactMouseEvent,
-  PropsWithChildren,
-  ReactNode,
-  Ref,
-  SyntheticEvent,
-} from "react";
+import type { HTMLAttributes, Ref } from "react";
 import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
-import { createPortal } from "react-dom";
-import { DPlayerEvents, MseType } from "./enum";
+import type { CustomController } from "./CustomControllersPortal";
+import { CustomControllers } from "./CustomControllersPortal";
+import { MseType } from "./enum";
+import type { UserEventsProps } from "./hooks/useEvents";
+import useEvents from "./hooks/useEvents";
 import "./index.less";
 import { getMSE } from "./mediaConfig";
 import { ext2MseType } from "./utils";
@@ -35,50 +30,9 @@ export interface PlayerRef {
   load: (url?: string, mseType?: MseType) => DPlayer | undefined;
 }
 
-export const initRef: PlayerRef = {
-  load: () => undefined,
-};
-
-type ControllerPosition = "left" | "right";
-
-export interface RcDPlayer extends DPlayer {
-  on(event: DPlayerEvents, handler: (event: SyntheticEvent) => void): void;
-}
-
-export interface CustomControllersProps extends PropsWithChildren<any> {
-  position: ControllerPosition;
-  playerDom?: HTMLElement | null;
-}
-
-export const CustomControllersPortal = ({
-  position,
-  children,
-  playerDom,
-}: CustomControllersProps) => {
-  if (children) {
-    const iconsDom = (playerDom || document.body)?.querySelector(
-      `.dplayer-icons-${position}`
-    );
-    if (iconsDom) {
-      return createPortal(children, iconsDom);
-    }
-    return null;
-  }
-  return null;
-};
-
-export interface CustomController {
-  key: Key;
-  position: ControllerPosition;
-  component: ReactNode;
-  onClick?: (event: ReactMouseEvent<HTMLDivElement, MouseEvent>) => void;
-}
-
 export interface DPlayerProps
-  extends Omit<
-    HTMLAttributes<HTMLDivElement>,
-    "onLoad" | "onError" | "onEnded"
-  > {
+  extends Omit<HTMLAttributes<HTMLDivElement>, "onLoad">,
+    UserEventsProps {
   src?: string;
   mseType?: MseType;
 
@@ -94,13 +48,7 @@ export interface DPlayerProps
    * Custom controller
    */
   customControllers?: CustomController[];
-  onLoad?: (dp: RcDPlayer) => void;
-
-  /**
-   * DPlayer Events
-   */
-  onEnded?: (event: SyntheticEvent) => void;
-  onError?: (event: SyntheticEvent) => void;
+  onLoad?: (dp: DPlayer) => void;
 }
 
 const Player = (
@@ -112,36 +60,21 @@ const Player = (
     customControllers = [],
     className,
     onLoad,
-    onEnded,
-    onError,
     ...divProps
   }: DPlayerProps,
   ref: Ref<PlayerRef>
 ) => {
   const dom = useRef<HTMLDivElement>(null);
-  const dp = useRef<RcDPlayer>();
+  const dp = useRef<DPlayer>();
   const mse = useRef<any>(null);
   const update = useUpdate();
-
-  const [customLeftControllers, customRightControllers] = useCreation(
-    () => [
-      customControllers.filter((d) => d.position === "left"),
-      customControllers.filter((d) => d.position === "right"),
-    ],
-    [customControllers]
-  );
 
   const handleDestroy = () => {
     dp.current?.destroy();
     mse.current?.destroy?.();
   };
 
-  const listenEvent = () => {
-    if (dp.current) {
-      onEnded && dp.current.on(DPlayerEvents.ended, onEnded);
-      onError && dp.current.on(DPlayerEvents.error, onError);
-    }
-  };
+  const listenEvent = useEvents(divProps);
 
   const handleLoad = useMemoizedFn((url = src, _mseType = mseType) => {
     if (!url) return;
@@ -165,8 +98,8 @@ const Player = (
         ...video,
       },
       ...otherOptions,
-    }) as RcDPlayer;
-    listenEvent();
+    }) as DPlayer;
+    listenEvent(dp.current);
     update();
     onLoad?.(dp.current);
     return dp.current;
@@ -186,37 +119,10 @@ const Player = (
     handleDestroy();
   });
 
-  const renderCustomControllers = useMemoizedFn(
-    (controllers: CustomController[]) =>
-      controllers.map(({ key, component, onClick }) => (
-        <div className="dplayer-icon" key={key} onClick={onClick}>
-          <span
-            className={classnames(
-              "dplayer-icon-content",
-              `${prefixCls("controller")}`
-            )}
-          >
-            {component}
-          </span>
-        </div>
-      ))
-  );
-
   return (
     <>
-      <div
-        ref={dom}
-        className={classnames(prefixCls(), className)}
-        {...divProps}
-      />
-      <>
-        <CustomControllersPortal position="left" playerDom={dom.current}>
-          {renderCustomControllers(customLeftControllers)}
-        </CustomControllersPortal>
-        <CustomControllersPortal position="right" playerDom={dom.current}>
-          {renderCustomControllers(customRightControllers)}
-        </CustomControllersPortal>
-      </>
+      <div ref={dom} className={classnames(prefixCls(), className)} />
+      <CustomControllers dom={dom} customControllers={customControllers} />
     </>
   );
 };

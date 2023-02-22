@@ -30,6 +30,12 @@ const App = () => {
       options={{
         autoplay: true,
       }}
+      onLoad={(dp) => {
+        console.log("DPlayer instance", dp);
+      }}
+      onError={(event) => {
+        console.error("error", event);
+      }}
     />
   );
 };
@@ -45,8 +51,37 @@ const App = () => {
 | options           | DPlayerOptions        | The other options of DPlayer .                   | -               |
 | customControllers | CustomController[]    | Custom controller                                | -               |
 | onLoad            | (dp: DPlayer) => void | Callback of player loaded                        | -               |
-| onEnded           | () => void            | `Ended` event of DPlayer .                       | -               |
-| onError           | () => void            | `Error` event of DPlayer .                       | -               |
+
+## Events
+
+Support [HTML media events](https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLMediaElement/abort_event) and [DPlayer events](https://dplayer.diygod.dev/zh/guide.html#%E4%BA%8B%E4%BB%B6%E7%BB%91%E5%AE%9A).
+
+```ts
+// React DPlayer Events
+export interface DPlayerEventsProps {
+  onScreenshot?: (blobUrl: string) => void;
+  onThumbnailsShow?: () => void;
+  onThumbnailsHide?: () => void;
+  onDanmakuShow?: () => void;
+  onDanmakuHide?: () => void;
+  onDanmakuClear?: () => void;
+  onDanmakuLoaded?: () => void;
+  onDanmakuSend?: () => void;
+  onDanmakuOpacity?: () => void;
+  onContextmenuShow?: () => void;
+  onContextmenuHide?: () => void;
+  onNoticeShow?: () => void;
+  onNoticeHide?: () => void;
+  onQualityStart?: () => void;
+  onQualityEnd?: () => void;
+  onDestroy?: () => void;
+  onFullscreen?: () => void;
+  onFullscreenCancel?: () => void;
+  onSubtitleShow?: () => void;
+  onSubtitleHide?: () => void;
+  onSubtitleChange?: () => void;
+}
+```
 
 ## Interface
 
