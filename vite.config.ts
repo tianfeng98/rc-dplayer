@@ -7,7 +7,7 @@ export default defineConfig({
   resolve: {
     alias: [
       { find: /^@\/(.*)/, replacement: resolve(__dirname, "src/$1") },
-      { find: /^#\/(.*)/, replacement: resolve(__dirname, "demo/$1") },
+      { find: /^@@\/(.*)/, replacement: resolve(__dirname, "demo/$1") },
     ],
   },
   plugins: [react(), cssInjectedByJsPlugin()],

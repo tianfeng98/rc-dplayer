@@ -5,8 +5,7 @@ import styles from "./app.module.less";
 
 function App() {
   const [testResources, setTestResources] = useState([
-    // "/test.mp4",
-    "/404",
+    "/test.mp4",
     "/hls/index.m3u8",
     "test.flv",
   ]);
@@ -16,12 +15,12 @@ function App() {
         url,
         JSON.stringify({
           currentTime,
-        })
+        }),
       );
     },
     {
       wait: 1000,
-    }
+    },
   );
 
   const hasDestroyed = useRef(false);
@@ -78,7 +77,7 @@ function App() {
               }
               // 保存播放进度
               dp.on(DPlayerEvents.timeupdate, ((
-                e: ChangeEvent<HTMLVideoElement>
+                e: ChangeEvent<HTMLVideoElement>,
               ) => {
                 if (!hasDestroyed.current) {
                   saveCurrent(d, e.target.currentTime);

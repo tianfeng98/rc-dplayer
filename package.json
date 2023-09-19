@@ -1,6 +1,6 @@
 {
   "name": "rc-dplayer",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "files": [
     "dist"
   ],
@@ -19,7 +19,9 @@
     "react player",
     "dplayer",
     "hls",
-    "flv"
+    "flv",
+    "hevc",
+    "h265"
   ],
   "scripts": {
     "dev": "vite",
@@ -35,28 +37,28 @@
   },
   "devDependencies": {
     "@types/dplayer": "^1.25.2",
-    "@types/node": "^18.11.19",
-    "@types/react": "^18.0.27",
-    "@types/react-dom": "^18.0.10",
-    "@vitejs/plugin-react-swc": "^3.1.0",
-    "less": "^4.1.3",
+    "@types/node": "^20.6.2",
+    "@types/react": "^18.2.21",
+    "@types/react-dom": "^18.2.7",
+    "@vitejs/plugin-react-swc": "^3.3.2",
+    "less": "^4.2.0",
     "prefix-classnames": "^0.0.7",
-    "prettier": "^2.8.4",
+    "prettier": "^3.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "typescript": "^4.9.5",
-    "vite": "3.2.5",
-    "vite-plugin-css-injected-by-js": "^3.0.0"
+    "typescript": "^5.2.2",
+    "vite": "4.4.9",
+    "vite-plugin-css-injected-by-js": "^3.3.0"
   },
   "peerDependencies": {
     "react": ">=17",
     "react-dom": ">=17"
   },
   "dependencies": {
-    "ahooks": "^3.7.4",
+    "@tianfeng98/hls.js": "^1.0.1",
+    "ahooks": "^3.7.8",
     "classnames": "^2.3.2",
     "dplayer": "^1.27.1",
-    "flv.js": "^1.6.2",
-    "hls.js": "^1.3.2"
+    "flv.js": "^1.6.2"
   }
 }

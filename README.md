@@ -4,6 +4,10 @@ This is a wrapper of [DPlyer](https://github.com/DIYgod/DPlayer);
 
 It contains `hls.js` and `flv.js`，you can play your video directly.
 
+**As of version 1.0.0, the HLS protocol supports HEVC encoding.**
+
+> Since Chrome 107 version supports HEVC hardware decoding function, this project upgrades hls.js and realizes HLS + HEVC video stream playback based on hardware decoding capability
+
 ## Install
 
 ### npm
